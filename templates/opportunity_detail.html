@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Opportunity Detail</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+
+.detail-container {
+
+    max-width: 800px;
+
+    margin: 50px auto;
+
+    background: rgba(255,255,255,0.05);
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+}
+
+.detail-header {
+
+    display: flex;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+
+}
+
+.detail-header img {
+
+    height: 60px;
+
+    margin-right: 20px;
+
+}
+
+.apply-btn {
+
+    margin-top: 20px;
+
+    padding: 12px 20px;
+
+    background: linear-gradient(135deg,#16a34a,#22c55e);
+
+    border: none;
+
+    border-radius: 8px;
+
+    color: white;
+
+    font-size: 16px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="navbar-title">
+        IvyIntel Opportunity Detail
+    </div>
+
+    <div>
+
+        <a href="/dashboard" style="color:#60a5fa;">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
+
+
+<div class="detail-container">
+
+    <div class="detail-header">
+
+        <img src="{{ url_for('static', filename=logo) }}">
+
+        <div>
+
+            <h2>{{ opp[1] }}</h2>
+
+            <p>{{ opp[2] }} University</p>
+
+        </div>
+
+    </div>
+
+
+    <p><strong>Category:</strong> {{ opp[3] }}</p>
+
+    <p><strong>Deadline:</strong> {{ opp[5] }}</p>
+
+    <p><strong>Description:</strong></p>
+
+    <p>
+        {{ opp[4] }}
+    </p>
+
+    <p><strong>Detected:</strong> {{ opp[7] }}</p>
+
+
+    <a href="{{ opp[6] }}" target="_blank">
+
+        <button class="apply-btn">
+            Apply on Official Website
+        </button>
+
+    </a>
+
+</div>
+
+
+<div class="footer">
+
+IvyIntel • Ivy League Opportunity Intelligence
+
+</div>
+
+</body>
+
+</html>

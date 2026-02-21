@@ -111,7 +111,7 @@ def dashboard():
     cursor = conn.cursor()
 
     query = """
-        SELECT title, university, category, deadline, link, created_at
+        SELECT id, title, university, category, deadline, link, created_at
         FROM opportunities
         WHERE 1=1
     """
@@ -134,7 +134,7 @@ def dashboard():
 
     if opportunities:
 
-        utc_time = datetime.strptime(opportunities[0][5], "%Y-%m-%d %H:%M:%S")
+        utc_time = datetime.strptime(opportunities[0][6], "%Y-%m-%d %H:%M:%S")
 
         ist_time = utc_time + timedelta(hours=5, minutes=30)
 
@@ -150,10 +150,45 @@ def dashboard():
     }
 
     selected_logo = LOGOS.get(university)
+    # Get user interest
+    conn = connect_db()
+    cursor = conn.cursor()
 
+    cursor.execute(
+        "SELECT interest FROM users WHERE email=?",
+        (session["user"],)
+    )
+
+    user_interest = cursor.fetchone()[0]
+
+    # Get recommended opportunities
+    cursor.execute("""
+    SELECT id, title, university, category, deadline, link, created_at
+    FROM opportunities
+    WHERE LOWER(category) = LOWER(?)
+    ORDER BY created_at DESC
+    LIMIT 5
+    """, (user_interest,))
+
+    recommended = cursor.fetchall()
+
+# fallback if empty
+    if not recommended:
+
+        cursor.execute("""
+        SELECT id, title, university, category, deadline, link, created_at
+        FROM opportunities
+        ORDER BY created_at DESC
+        LIMIT 5
+        """)
+
+        recommended = cursor.fetchall()
+
+    conn.close()
     return render_template(
         "dashboard.html",
         opportunities=opportunities,
+        recommended=recommended,
         logos=LOGOS,
         selected_university=university,
         selected_category=category,
@@ -167,8 +202,44 @@ def logout():
     session.clear()
 
     return redirect("/")
+@app.route("/opportunity/<int:opp_id>")
+def opportunity_detail(opp_id):
 
+    if "user" not in session:
+        return redirect("/")
 
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, title, university, category,
+               description, deadline, link, created_at
+        FROM opportunities
+        WHERE id = ?
+    """, (opp_id,))
+
+    opp = cursor.fetchone()
+
+    conn.close()
+
+    if opp is None:
+        return "Opportunity not found"
+
+    LOGOS = {
+        "Harvard": "logos/harvard.png",
+        "Yale": "logos/yale.png",
+        "Princeton": "logos/princeton.png",
+        "Columbia": "logos/columbia.png",
+        "UPenn": "logos/upenn.png"
+    }
+
+    logo = LOGOS.get(opp[2])
+
+    return render_template(
+        "opportunity_detail.html",
+        opp=opp,
+        logo=logo
+    )
 # RUN SERVER
 if __name__ == "__main__":
     app.run(debug=True)

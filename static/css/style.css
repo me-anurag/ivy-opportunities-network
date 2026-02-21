@@ -363,3 +363,117 @@ td {
     align-items: center;
 
 }
+/* RECOMMENDATION SECTION */
+
+.recommendation-section {
+
+    margin-bottom: 30px;
+
+}
+
+.recommendation-header {
+
+    margin-bottom: 15px;
+
+}
+
+.recommendation-title {
+
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color: #22c55e;
+
+}
+
+.recommendation-sub {
+
+    font-size: 13px;
+
+    color: #94a3b8;
+
+}
+
+
+.recommendation-container {
+
+    background: linear-gradient(
+        135deg,
+        rgba(34,197,94,0.15),
+        rgba(34,197,94,0.05)
+    );
+
+    border: 1px solid rgba(34,197,94,0.3);
+
+    border-radius: 15px;
+
+    padding: 15px;
+
+}
+
+
+.recommendation-card {
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    margin-bottom: 10px;
+
+    background: rgba(255,255,255,0.05);
+
+    transition: 0.3s;
+
+}
+
+.recommendation-card:hover {
+
+    background: rgba(34,197,94,0.15);
+
+}
+
+
+.recommendation-logo {
+
+    height: 40px;
+
+    margin-right: 15px;
+
+}
+
+
+.recommendation-middle {
+
+    flex: 1;
+
+}
+
+.recommendation-opp-title {
+
+    font-weight: bold;
+
+}
+
+.recommendation-meta {
+
+    font-size: 13px;
+
+    color: #94a3b8;
+
+}
+
+
+.recommendation-btn {
+
+    background: linear-gradient(135deg,#16a34a,#22c55e);
+
+    padding: 8px 16px;
+
+    border-radius: 8px;
+
+}

@@ -258,8 +258,73 @@
             </form>
 
         </div>
+{% if recommended %}
+
+<div class="recommendation-section">
+
+    <div class="recommendation-header">
+
+        <div class="recommendation-title">
+            Recommended for You
+        </div>
+
+        <div class="recommendation-sub">
+            Based on your interest: {{ selected_category or "AI" }}
+        </div>
+
+    </div>
 
 
+    <div class="recommendation-container">
+
+        {% for opp in recommended %}
+
+        <div class="recommendation-card">
+
+            <div class="recommendation-left">
+
+                <img src="{{ url_for('static', filename=logos[opp[2]]) }}"
+                     class="recommendation-logo">
+
+            </div>
+
+
+            <div class="recommendation-middle">
+
+                <div class="recommendation-opp-title">
+                    {{ opp[1] }}
+                </div>
+
+                <div class="recommendation-meta">
+
+                    {{ opp[2] }} • {{ opp[3] }}
+
+                </div>
+
+            </div>
+
+
+            <div class="recommendation-right">
+
+                <a href="/opportunity/{{ opp[0] }}">
+
+                    <button class="recommendation-btn">
+                        View
+                    </button>
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endif %}
 
         <!-- OPPORTUNITIES TABLE -->
 <div class="table-container">
@@ -285,21 +350,21 @@
             <tr>
 
                 <td>
-                    <img src="{{ url_for('static', filename=logos[opp[1]]) }}"
+                    <img src="{{ url_for('static', filename=logos[opp[2]]) }}"
                          class="logo-small">
                 </td>
 
-                <td>{{ opp[1] }}</td>
-
-                <td>{{ opp[0] }}</td>
-
                 <td>{{ opp[2] }}</td>
+
+                <td>{{ opp[1] }}</td>
 
                 <td>{{ opp[3] }}</td>
 
+                <td>{{ opp[4] }}</td>
+
                 <td>
-                    <a href="{{ opp[4] }}" target="_blank">
-                        <button>View</button>
+                    <a href="/opportunity/{{ opp[0] }}">
+                        <button>View Details</button>
                     </a>
                 </td>
 
