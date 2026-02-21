@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Signup - IvyIntel</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="logo">IvyIntel</div>
+
+    <div class="subtitle">Create Account</div>
+
+    <form method="POST">
+
+        Name
+        <input type="text" name="name" required>
+
+        Email
+        <input type="email" name="email" required>
+
+        Password
+        <input type="password" name="password" required>
+
+        Interest
+        <input type="text" name="interest" placeholder="AI, Engineering, Law..." required>
+
+        <button type="submit">
+            Signup
+        </button>
+
+    </form>
+
+    <br>
+
+    Already have account?
+
+    <a href="/">Login</a>
+
+</div>
+
+</body>
+
+</html>

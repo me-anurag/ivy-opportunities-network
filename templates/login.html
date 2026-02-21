@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Login - IvyIntel</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="logo">IvyIntel</div>
+
+    <div class="subtitle">
+        Ivy League Opportunity Intelligence
+    </div>
+
+    <form method="POST" action="/login">
+
+        Email
+        <input type="email" name="email" required>
+
+        Password
+        <input type="password" name="password" required>
+
+        <button type="submit">
+            Login
+        </button>
+
+    </form>
+
+    <div class="or-divider">
+        ─── OR ───
+    </div>
+
+    <a href="/google_login">
+        <button class="google-btn">
+            Login with Google
+        </button>
+    </a>
+    <br><br>
+
+    Don't have account?
+
+<a href="/signup">
+    Signup
+</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Dashboard - IvyIntel</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <div class="navbar-title">
+        IvyIntel
+    </div>
+
+    <div>
+        Welcome, {{ session.user }}
+        |
+        <a href="/logout" style="color:#60a5fa;">
+            Logout
+        </a>
+    </div>
+
+</div>
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+    <!-- LOGO -->
+    <div class="sidebar-logo">
+
+        <img src="{{ url_for('static', filename='icons/logo.png') }}"
+             class="sidebar-logo-img">
+
+        <div class="logo-text">
+            IvyIntel
+        </div>
+
+        <div class="logo-sub">
+            Opportunity Intelligence
+        </div>
+
+    </div>
+
+
+    <!-- USER -->
+    <div class="sidebar-user">
+
+        <img src="{{ url_for('static', filename='icons/user.png') }}"
+             class="user-icon">
+
+        <div class="user-email">
+            {{ session.user }}
+        </div>
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <div class="sidebar-menu">
+
+        <a href="/dashboard" class="menu-item active">
+
+            <img src="{{ url_for('static', filename='icons/dashboard.png') }}"
+                 class="menu-icon-img">
+
+            Dashboard
+
+        </a>
+
+
+        <a href="/fetch" class="menu-item">
+
+            <img src="{{ url_for('static', filename='icons/fetch.png') }}"
+                 class="menu-icon-img">
+
+            Fetch Opportunities
+
+        </a>
+
+
+        <a href="/dashboard" class="menu-item">
+
+            <img src="{{ url_for('static', filename='icons/university.png') }}"
+                 class="menu-icon-img">
+
+            Universities
+
+        </a>
+
+
+        <a href="/dashboard" class="menu-item">
+
+            <img src="{{ url_for('static', filename='icons/category.png') }}"
+                 class="menu-icon-img">
+
+            Categories
+
+        </a>
+
+
+        <a href="/logout" class="menu-item logout-item">
+
+            <img src="{{ url_for('static', filename='icons/logout.png') }}"
+                 class="menu-icon-img">
+
+            Logout
+
+        </a>
+
+    </div>
+
+</div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- HEADING PANEL -->
+        <div class="heading-panel">
+
+    {% if selected_university %}
+
+        <img src="{{ url_for('static', filename=selected_logo) }}">
+
+        <div>
+
+            <h2>{{ selected_university }} University</h2>
+
+            <p>Showing Opportunities</p>
+
+        </div>
+
+    {% else %}
+
+        <div>
+
+            <h2>All Ivy League Opportunities</h2>
+
+            <p>Select a university to view opportunities</p>
+
+        </div>
+
+    {% endif %}
+
+</div>
+<!-- REAL-TIME INDICATOR -->
+{% if last_updated %}
+
+<div style="
+    background: white;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    color: #16a34a;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+">
+
+    <span style="
+        height:10px;
+        width:10px;
+        background:#16a34a;
+        border-radius:50%;
+        display:inline-block;
+        margin-right:10px;
+    "></span>
+
+    Live • Last updated: {{ last_updated }}
+
+</div>
+
+{% endif %}
+
+        <!-- FILTER PANEL -->
+        <div class="filter-panel">
+
+            <form method="POST">
+
+                <select name="university">
+
+    <option value="">Select University</option>
+
+    <option value="Harvard"
+    {% if selected_university == "Harvard" %}selected{% endif %}>
+    Harvard
+    </option>
+
+    <option value="Yale"
+    {% if selected_university == "Yale" %}selected{% endif %}>
+    Yale
+    </option>
+
+    <option value="Princeton"
+    {% if selected_university == "Princeton" %}selected{% endif %}>
+    Princeton
+    </option>
+
+    <option value="Columbia"
+    {% if selected_university == "Columbia" %}selected{% endif %}>
+    Columbia
+    </option>
+
+    <option value="UPenn"
+    {% if selected_university == "UPenn" %}selected{% endif %}>
+    UPenn
+    </option>
+
+</select>
+
+
+               <select name="category">
+
+    <option value="">Select Category</option>
+
+    <option value="AI"
+    {% if selected_category == "AI" %}selected{% endif %}>
+    AI
+    </option>
+
+    <option value="Engineering"
+    {% if selected_category == "Engineering" %}selected{% endif %}>
+    Engineering
+    </option>
+
+    <option value="Law"
+    {% if selected_category == "Law" %}selected{% endif %}>
+    Law
+    </option>
+
+    <option value="Biomedical"
+    {% if selected_category == "Biomedical" %}selected{% endif %}>
+    Biomedical
+    </option>
+
+</select>
+
+
+                <button type="submit" class="apply-btn">
+    Apply Filter
+</button>
+
+<a href="/fetch">
+
+    <button type="button" class="fetch-btn">
+        Fetch Latest Data
+    </button>
+
+</a>
+
+            </form>
+
+        </div>
+
+
+
+        <!-- OPPORTUNITIES TABLE -->
+<div class="table-container">
+
+    <table>
+
+        <tr>
+
+            <th>Logo</th>
+            <th>University</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Deadline</th>
+            <th>Apply</th>
+
+        </tr>
+
+
+        {% if opportunities %}
+
+            {% for opp in opportunities %}
+
+            <tr>
+
+                <td>
+                    <img src="{{ url_for('static', filename=logos[opp[1]]) }}"
+                         class="logo-small">
+                </td>
+
+                <td>{{ opp[1] }}</td>
+
+                <td>{{ opp[0] }}</td>
+
+                <td>{{ opp[2] }}</td>
+
+                <td>{{ opp[3] }}</td>
+
+                <td>
+                    <a href="{{ opp[4] }}" target="_blank">
+                        <button>View</button>
+                    </a>
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <tr>
+                <td colspan="6" style="text-align:center; padding:20px;">
+                    No opportunities found.
+                </td>
+            </tr>
+
+        {% endif %}
+
+    </table>
+
+</div>
+
+    </div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+IvyIntel • Ivy League Opportunity Intelligence Network • Real-Time AI Powered System
+
+</div>
+
+</body>
+
+</html>
