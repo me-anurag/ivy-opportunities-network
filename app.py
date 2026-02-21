@@ -17,14 +17,30 @@ def connect_db():
 # HOME PAGE → LOGIN PAGE
 @app.route("/")
 def home():
+    
     return render_template("login.html")
 @app.route("/fetch")
 def fetch():
 
+    if "user" not in session:
+        return redirect("/")
+
+    # Run scraper
     scrape_all()
 
-    return redirect("/dashboard")
+    # Increase InCoScore for fetching new data
+    conn = connect_db()
+    cursor = conn.cursor()
 
+    cursor.execute(
+        "UPDATE users SET incoscore = incoscore + 10 WHERE email=?",
+        (session["user"],)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/dashboard")
 # SIGNUP PAGE
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -184,12 +200,24 @@ def dashboard():
 
         recommended = cursor.fetchall()
 
+    # Fetch InCoScore
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT incoscore FROM users WHERE email=?",
+        (session["user"],)
+    )
+
+    incoscore = cursor.fetchone()[0]
+
     conn.close()
     return render_template(
         "dashboard.html",
         opportunities=opportunities,
         recommended=recommended,
         logos=LOGOS,
+        incoscore=incoscore,
         selected_university=university,
         selected_category=category,
         selected_logo=selected_logo,
@@ -203,6 +231,7 @@ def logout():
 
     return redirect("/")
 @app.route("/opportunity/<int:opp_id>")
+@app.route("/opportunity/<int:opp_id>")
 def opportunity_detail(opp_id):
 
     if "user" not in session:
@@ -211,6 +240,7 @@ def opportunity_detail(opp_id):
     conn = connect_db()
     cursor = conn.cursor()
 
+    # Fetch opportunity
     cursor.execute("""
         SELECT id, title, university, category,
                description, deadline, link, created_at
@@ -220,10 +250,19 @@ def opportunity_detail(opp_id):
 
     opp = cursor.fetchone()
 
-    conn.close()
-
     if opp is None:
+        conn.close()
         return "Opportunity not found"
+
+    # Increase InCoScore when user views opportunity
+    cursor.execute(
+        "UPDATE users SET incoscore = incoscore + 5 WHERE email=?",
+        (session["user"],)
+    )
+
+    conn.commit()
+
+    conn.close()
 
     LOGOS = {
         "Harvard": "logos/harvard.png",
